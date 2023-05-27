@@ -1,0 +1,71 @@
+from tkinter import *
+import datetime
+import time
+import winsound
+from tkinter import messagebox
+from tkinter import filedialog
+
+def alarm(set_alarm_timer, sound_file):
+    while True:
+        time.sleep(1)
+        current_time = datetime.datetime.now()
+        now = current_time.strftime("%H:%M:%S")
+        date = current_time.strftime("%d/%m/%Y")
+        print("The Set Date is:", date)
+        print(now)
+        if now == set_alarm_timer:
+            print("Time to Wake up")
+            messagebox.showinfo("Alarm", "Time to Wake up")
+            winsound.PlaySound(sound_file, winsound.SND_ASYNC)
+            break
+
+def set_sound_file():
+    file_path = filedialog.askopenfilename(filetypes=[("Sound files", "*.wav")])
+    if file_path:
+        sound_entry.delete(0, END)
+        sound_entry.insert(END, file_path)
+
+def actual_time():
+    set_alarm_timer = f"{hour.get()}:{minute.get()}:{second.get()}"
+    sound_file = sound_entry.get()
+    alarm(set_alarm_timer, sound_file)
+
+clock = Tk()
+clock.title("The Alarm Clock")
+clock.geometry("400x250")
+
+time_format = Label(clock, text="Enter time in 24-hour format!", fg="red", bg="black", font="Arial")
+time_format.place(x=60, y=170)
+
+add_time = Label(clock, text="Hour   Min    Sec", font=60)
+add_time.place(x=110)
+
+set_your_alarm = Label(clock, text="When to wake you up", fg="blue", relief="solid", font=("Helvetica", 10, "bold"))
+set_your_alarm.place(x=0, y=30)
+
+hour = StringVar()
+minute = StringVar()
+second = StringVar()
+
+hour_time = Entry(clock, textvariable=hour, bg="pink", width=15)
+hour_time.place(x=110, y=30)
+
+minute_time = Entry(clock, textvariable=minute, bg="pink", width=15)
+minute_time.place(x=150, y=30)
+
+second_time = Entry(clock, textvariable=second, bg="pink", width=15)
+second_time.place(x=200, y=30)
+
+sound_label = Label(clock, text="Sound File")
+sound_label.place(x=50, y=100)
+
+sound_entry = Entry(clock, bg="pink", width=25)
+sound_entry.place(x=110, y=100)
+
+browse_button = Button(clock, text="Browse", fg="black", width=10, command=set_sound_file)
+browse_button.place(x=280, y=96)
+
+submit_button = Button(clock, text="Set Alarm", fg="red", width=10, command=actual_time)
+submit_button.place(x=110, y=140)
+
+clock.mainloop()
